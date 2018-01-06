@@ -18,7 +18,8 @@ float minBri = 170;
 float hueRange = 5;
 int blur = 0;
 boolean orignalVideo = true;
-float selectedHue = 10;
+int[] selectedHue = {0, 75, 150};
+int currentColor = 0;
 int currentX = 0;
 
 void setup() {
@@ -64,7 +65,7 @@ void draw() {
       float s = saturation(get(x, y));
       float b = brightness(get(x, y));
 
-      if ((h<(selectedHue+hueRange) && h>(selectedHue-hueRange)) && s > minSat && b > minBri) {
+      if ((h<(selectedHue[currentColor]+hueRange) && h>(selectedHue[currentColor]-hueRange)) && s > minSat && b > minBri) {
         pixels[loc] =  color(h, s, b);   
         if (x==currentX) {
           msg.add((float)1);
@@ -100,16 +101,15 @@ void draw() {
 
 void mousePressed() {
   if (mouseX>150&& mouseY >120)  
-    selectedHue = (int)hue(get(mouseX, mouseY));
+    selectedHue[currentColor] = (int)hue(get(mouseX, mouseY));
 }
 
 void drawUI() {
-  
   int h = 150;
-  
-  fill(selectedHue, 255, 255);
-  rect(3, 3, 12, 12);
-
+  for (int i = 0; i<selectedHue.length; i++) {
+  fill(selectedHue[i], 255, 255);
+  rect(3 + i * 15, 3, 12, 12);
+  }
   stroke(0);
   line(150, 0, 150, h);
   line( 0, h, 150, h);
